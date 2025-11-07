@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 import { Board } from '../../../../core/grid-utils';
 
@@ -10,18 +10,13 @@ import { Board } from '../../../../core/grid-utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LifeGridComponent {
-  @Input({ required: true }) board!: Board;
+  readonly board = input.required<Board>();
 
-  readonly trackRow = (rowIndex: number): number => rowIndex;
-  readonly trackCell = (cellIndex: number): number => cellIndex;
-
-  get columnCount(): number {
-    return this.board?.[0]?.length ?? 0;
-  }
+  readonly columnCount = computed(() => this.board()?.[0]?.length ?? 0);
 
   get gridTemplateColumns(): string {
-    const cols = this.columnCount;
-
+    const cols = this.columnCount();
+    
     return cols > 0 ? `repeat(${cols}, var(--cell-size))` : 'none';
   }
 }

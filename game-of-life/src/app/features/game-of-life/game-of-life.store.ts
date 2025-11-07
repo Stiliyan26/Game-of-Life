@@ -3,7 +3,7 @@ import { Injectable, effect, signal } from '@angular/core';
 import { GAME_CONFIG } from '../../core/game-config';
 import { Board, createRandomBoard, computeNextBoard } from '../../core/grid-utils';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class GameOfLifeStore {
 
   private readonly size = {

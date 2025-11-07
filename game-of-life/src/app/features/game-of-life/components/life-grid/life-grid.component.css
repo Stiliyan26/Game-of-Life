@@ -23,7 +23,7 @@
   border-radius: 3px;
   background-color: var(--cell-dead-color);
   border: 1px solid var(--cell-border-color);
-  transition: background-color 120ms ease-in, border-color 120ms ease-in;
+  transition: background-color 1000ms ease-in, border-color 1000ms ease-in;
 }
 
 .grid-cell--alive {

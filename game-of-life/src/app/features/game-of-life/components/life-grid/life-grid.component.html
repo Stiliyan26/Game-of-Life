@@ -4,8 +4,8 @@
   aria-label="Game of Life grid"
   [style.gridTemplateColumns]="gridTemplateColumns"
 >
-  @for (row of board; track trackRow($index); let rowIndex = $index) {
-    @for (cell of row; track trackCell($index); let cellIndex = $index) {
+  @for (row of board(); track rowIndex; let rowIndex = $index) {
+    @for (cell of row; track cellIndex; let cellIndex = $index) {
       <div
         class="grid-cell"
         role="gridcell"
