@@ -1,7 +1,7 @@
 export const GAME_CONFIG = {
-    rows: 40,
+    rows: 30,
     cols: 60,
-    ticksMs: 160
+    tickMs: 2000
 } as const;
 
 export type GameConfig = typeof GAME_CONFIG;

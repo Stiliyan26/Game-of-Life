@@ -1,0 +1,18 @@
+<div
+  class="grid"
+  role="grid"
+  aria-label="Game of Life grid"
+  [style.gridTemplateColumns]="gridTemplateColumns"
+>
+  @for (row of board; track trackRow($index); let rowIndex = $index) {
+    @for (cell of row; track trackCell($index); let cellIndex = $index) {
+      <div
+        class="grid-cell"
+        role="gridcell"
+        [attr.data-row]="rowIndex"
+        [attr.data-col]="cellIndex"
+        [class.grid-cell--alive]="cell === 1"
+      ></div>
+    }
+  }
+</div>
