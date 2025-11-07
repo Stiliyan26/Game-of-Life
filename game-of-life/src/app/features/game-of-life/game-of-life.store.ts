@@ -47,6 +47,11 @@ export class GameOfLifeStore {
     this.running.update(isRunning => !isRunning);
   }
 
+  stepOnce(): void {
+    this.pause();
+    this.advance();
+  }
+
   private startTimer(): void {
     this.stopTimer();
     this.timerId = setInterval(() => this.advance(), GAME_CONFIG.tickMs);
