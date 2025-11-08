@@ -1,7 +1,11 @@
 import { Injectable, effect, signal } from '@angular/core';
 
-import { GAME_CONFIG } from '../../core/game-config';
-import { Board, createRandomBoard, computeNextBoard } from '../../core/grid-utils';
+import { GAME_CONFIG } from '../../../core/game-config/game-config';
+import {
+  Board,
+  createRandomBoard,
+  computeNextBoard,
+} from '../utils/grid-utils';
 
 @Injectable()
 export class GameOfLifeStore {
@@ -59,8 +63,8 @@ export class GameOfLifeStore {
 
   private stopTimer(): void {
     if (this.timerId !== null) {
-        clearInterval(this.timerId);
-        this.timerId = null;
+      clearInterval(this.timerId);
+      this.timerId = null;
     }
   }
 }

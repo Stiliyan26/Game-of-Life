@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-import { Board } from '../../../../core/grid-utils';
+import { Board } from '../../utils/grid-utils';
 
 @Component({
   selector: 'app-life-grid',
@@ -16,7 +16,7 @@ export class LifeGridComponent {
 
   get gridTemplateColumns(): string {
     const cols = this.columnCount();
-    
+
     return cols > 0 ? `repeat(${cols}, var(--cell-size))` : 'none';
   }
 }

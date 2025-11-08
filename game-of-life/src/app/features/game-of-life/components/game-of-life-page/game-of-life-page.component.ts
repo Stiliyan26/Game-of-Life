@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { GameOfLifeStore } from '../../game-of-life.store';
+import { GameOfLifeStore } from '../../data-access/game-of-life.store';
 import { LifeGridComponent } from '../life-grid/life-grid.component';
 
 @Component({
