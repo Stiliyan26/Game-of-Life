@@ -1,16 +1,22 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 import { GameOfLifeStore } from '../../data-access/game-of-life.store';
 import { LifeGridComponent } from '../life-grid/life-grid.component';
-import { Pattern } from '../../data-access/pattern.models';
+import { PatternService } from '../../data-access/pattern.service';
+import { GameStatusBarComponent } from '../game-status-bar/game-status-bar.component';
+import { PatternSelectComponent } from '../pattern-select/pattern-select.component';
+import { PatternSaveFormComponent } from '../pattern-save-form/pattern-save-form.component';
 
 @Component({
   selector: 'app-game-of-life-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, LifeGridComponent],
-  providers: [GameOfLifeStore],
+  imports: [
+    LifeGridComponent,
+    GameStatusBarComponent,
+    PatternSelectComponent,
+    PatternSaveFormComponent,
+  ],
+  providers: [GameOfLifeStore, PatternService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './game-of-life-page.component.html',
   styleUrls: ['./game-of-life-page.component.css'],
@@ -35,19 +41,13 @@ export class GameOfLifePageComponent {
   readonly onStep = () => this.store.stepOnce();
   readonly onRandomize = () => this.store.randomize();
   readonly onSavePattern = () => this.store.saveCurrentPattern();
-  readonly handlePatternSelect = (event: Event) => {
-    const target = event.target as HTMLSelectElement | null;
-    const value = target?.value ?? '';
-
-    if (value) {
-      this.store.applyPattern(value);
+  readonly onPatternSelected = (patternId: string | null) => {
+    if (patternId) {
+      this.store.applyPattern(patternId);
     }
   };
-  readonly handlePatternNameInput = (event: Event) => {
-    const target = event.target as HTMLInputElement | null;
-    this.store.updatePatternName(target?.value ?? '');
+  readonly handlePatternNameInput = (value: string) => {
+    this.store.updatePatternName(value ?? '');
   };
   readonly onReloadPatterns = () => this.store.loadPatterns();
-
-  readonly trackPattern = (_: number, pattern: Pattern) => pattern.id;
 }

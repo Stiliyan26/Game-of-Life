@@ -1,125 +1,38 @@
 <section class="page" aria-live="polite">
-  <header class="page__header">
-    <div class="page__stats">
-      <div class="stat">
-        <span class="stat__label">Generation</span>
-        <span class="stat__value">{{ generation() }}</span>
-      </div>
-
-      <div class="stat">
-        <span class="stat__label">Status</span>
-        
-        <span class="stat__value">
-            {{ running() ? 'Running' : 'Paused' }}
-        </span>
-      </div>
-    </div>
-
-    <div class="controls" role="group" aria-label="Simulation controls">
-      <button
-        type="button"
-        class="controls__button"
-        (click)="onToggle()"
-      >
-        {{ running() ? 'Pause' : 'Start' }}
-      </button>
-      <button
-        type="button"
-        class="controls__button"
-        (click)="onStep()"
-        [disabled]="running()"
-      >
-        Step
-      </button>
-      <button
-        type="button"
-        class="controls__button"
-        (click)="onRandomize()"
-        [disabled]="running()"
-      >
-        Randomize
-      </button>
-    </div>
-  </header>
+  <app-game-status-bar
+    [generation]="generation()"
+    [running]="running()"
+    (toggle)="onToggle()"
+    (step)="onStep()"
+    (randomize)="onRandomize()"
+  />
 
   <section class="pattern-panel" aria-label="Pattern management">
-    <div class="pattern-panel__load">
-      <label class="pattern-panel__label" for="pattern-select">Saved patterns</label>
-      <div class="pattern-panel__controls">
-        <select
-          id="pattern-select"
-          class="pattern-panel__select"
-          [disabled]="patternsLoading()"
-          (change)="handlePatternSelect($event)"
-        >
-          <option value="" [selected]="!selectedPatternId()">Choose a pattern…</option>
-          @for (pattern of patterns(); track trackPattern($index, pattern)) {
-            <option [value]="pattern.id" [selected]="pattern.id === selectedPatternId()">
-              {{ pattern.name }}
-            </option>
-          }
-        </select>
-
-        <button
-          type="button"
-          class="pattern-panel__refresh"
-          (click)="onReloadPatterns()"
-          [disabled]="patternsLoading()"
-        >
-          {{ patternsLoading() ? 'Loading…' : 'Refresh' }}
-        </button>
-      </div>
-
-      @if (patternsLoading()) {
-        <p class="pattern-panel__status">Loading patterns…</p>
-      } @else if (patternsError()) {
-        <p class="pattern-panel__status pattern-panel__status--error">
-          {{ patternsError() }}
-        </p>
-      } @else if (patterns().length === 0) {
-        <p class="pattern-panel__status">No saved patterns yet.</p>
-      }
-    </div>
+    <app-pattern-select
+      [patterns]="patterns()"
+      [selectedPatternId]="selectedPatternId()"
+      [loading]="patternsLoading()"
+      [error]="patternsError()"
+      (selectionChange)="onPatternSelected($event)"
+      (refresh)="onReloadPatterns()"
+    />
 
     @if (!running()) {
-      <div class="pattern-panel__save">
-        <label class="pattern-panel__label" for="pattern-name">Save current pattern</label>
-        <div class="pattern-panel__controls">
-          <input
-            id="pattern-name"
-            type="text"
-            class="pattern-panel__input"
-            placeholder="Pattern name"
-            [value]="patternName()"
-            (input)="handlePatternNameInput($event)"
-            maxlength="100"
-            autocomplete="off"
-          />
-
-          <button
-            type="button"
-            class="pattern-panel__save-button"
-            (click)="onSavePattern()"
-            [disabled]="!canSavePattern() || isSaving()"
-          >
-            {{ isSaving() ? 'Saving…' : 'Save pattern' }}
-          </button>
-        </div>
-
-        @if (saveMessage()) {
-          <p
-            class="pattern-panel__status"
-            [class.pattern-panel__status--error]="saveStatus() === 'error'"
-          >
-            {{ saveMessage() }}
-          </p>
-        }
-      </div>
+      <app-pattern-save-form
+        [name]="patternName()"
+        [canSave]="canSavePattern()"
+        [isSaving]="isSaving()"
+        [status]="saveStatus()"
+        [message]="saveMessage()"
+        (nameChange)="handlePatternNameInput($event)"
+        (save)="onSavePattern()"
+      />
     } @else {
-      <p class="pattern-panel__hint">Pause the simulation to name and save the current grid.</p>
+      <p class="pattern-panel__hint">
+        Pause the simulation to name and save the current grid.
+      </p>
     }
   </section>
 
   <app-life-grid [board]="board()"></app-life-grid>
 </section>
-

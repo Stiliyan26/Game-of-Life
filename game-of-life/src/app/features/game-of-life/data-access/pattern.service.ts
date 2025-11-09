@@ -5,9 +5,7 @@ import { Observable } from 'rxjs';
 import { API_URL } from '../../../core/api/api-url.token';
 import { CreatePatternPayload, Pattern } from './pattern.models';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class PatternService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(API_URL);

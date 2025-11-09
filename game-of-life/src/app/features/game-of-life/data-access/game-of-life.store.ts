@@ -20,6 +20,7 @@ import { PatternService } from './pattern.service';
 
 @Injectable()
 export class GameOfLifeStore {
+  
   private readonly size = {
     rows: GAME_CONFIG.rows,
     cols: GAME_CONFIG.cols,
@@ -101,15 +102,20 @@ export class GameOfLifeStore {
 
   async loadPatterns(): Promise<void> {
     this.patternsLoading.set(true);
+
     this.patternsError.set(null);
+    
     try {
       const patterns = await firstValueFrom(this.patternService.getAll());
       const ordered = [...patterns].sort(
         (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
       );
+    
       this.patterns.set(ordered);
+    
     } catch (error) {
       this.patternsError.set(this.extractErrorMessage(error));
+    
     } finally {
       this.patternsLoading.set(false);
     }
