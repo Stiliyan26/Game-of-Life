@@ -1,34 +1,35 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
-import { Pattern } from '../../data-access/pattern.models';
+import { GameOfLifeStore } from '../../data-access/game-of-life.store';
 
 @Component({
   selector: 'app-pattern-select',
   standalone: true,
   templateUrl: './pattern-select.component.html',
   styleUrls: ['./pattern-select.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PatternSelectComponent {
 
-  readonly patterns = input<Pattern[]>([], { alias: 'patterns' });
-  readonly loading = input<boolean>(false);
-  readonly error = input<string | null>(null);
-  readonly selectedPatternId = input<string | null>(null);
+  private readonly store = inject(GameOfLifeStore);
 
-  readonly refresh = output<void>();
-  readonly selectionChange = output<string | null>();
+  readonly patterns = this.store.patterns;
+  readonly loading = this.store.patternsLoading;
+  readonly error = this.store.patternsError;
+  readonly selectedPatternId = this.store.selectedPatternId;
 
   readonly hasPatterns = computed(() => this.patterns().length > 0);
 
   protected onSelect(value: string): void {
-    this.selectionChange.emit(value.length ? value : null);
+    if (value) {
+      this.store.applyPattern(value);
+    } else {
+      this.store.selectedPatternId.set(null);
+    }
+  }
+
+  protected refresh(): void {
+    void this.store.loadPatterns();
   }
 }
 

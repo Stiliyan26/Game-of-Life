@@ -1,32 +1,11 @@
 <section class="page" aria-live="polite">
-  <app-game-status-bar
-    [generation]="generation()"
-    [running]="running()"
-    (toggle)="onToggle()"
-    (step)="onStep()"
-    (randomize)="onRandomize()"
-  />
+  <app-game-status-bar />
 
   <section class="pattern-panel" aria-label="Pattern management">
-    <app-pattern-select
-      [patterns]="patterns()"
-      [selectedPatternId]="selectedPatternId()"
-      [loading]="patternsLoading()"
-      [error]="patternsError()"
-      (selectionChange)="onPatternSelected($event)"
-      (refresh)="onReloadPatterns()"
-    />
+    <app-pattern-select />
 
     @if (!running()) {
-      <app-pattern-save-form
-        [name]="patternName()"
-        [canSave]="canSavePattern()"
-        [isSaving]="isSaving()"
-        [status]="saveStatus()"
-        [message]="saveMessage()"
-        (nameChange)="handlePatternNameInput($event)"
-        (save)="onSavePattern()"
-      />
+      <app-pattern-save-form />
     } @else {
       <p class="pattern-panel__hint">
         Pause the simulation to name and save the current grid.

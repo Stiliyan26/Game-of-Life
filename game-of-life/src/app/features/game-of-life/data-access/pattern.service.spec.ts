@@ -6,7 +6,7 @@ import {
 
 import { PatternService } from './pattern.service';
 import { API_URL } from '../../../core/api/api-url.token';
-import { CreatePatternPayload, Pattern } from './pattern.models';
+import { CreatePatternPayload, Pattern } from '../models/pattern.models';
 
 describe('PatternService', () => {
   let service: PatternService;

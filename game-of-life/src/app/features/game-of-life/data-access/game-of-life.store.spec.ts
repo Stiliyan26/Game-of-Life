@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { GameOfLifeStore } from './game-of-life.store';
 import { PatternService } from './pattern.service';
-import { Pattern } from './pattern.models';
+import { Pattern } from '../models/pattern.models';
 
 describe('GameOfLifeStore', () => {
   let store: GameOfLifeStore;

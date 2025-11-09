@@ -15,7 +15,9 @@ import {
   createRandomBoard,
   computeNextBoard,
 } from '../utils/grid-utils';
-import { Pattern, CreatePatternPayload } from './pattern.models';
+import { Pattern, CreatePatternPayload } from '../models/pattern.models';
+
+export type SaveStatus = 'idle' | 'saving' | 'success' | 'error';
 import { PatternService } from './pattern.service';
 
 @Injectable()
@@ -43,12 +45,12 @@ export class GameOfLifeStore {
   readonly patternName = signal<string>('');
   readonly selectedPatternId = signal<string | null>(null);
 
-  readonly saveStatus = signal<'idle' | 'saving' | 'success' | 'error'>('idle');
+  readonly saveStatus = signal<SaveStatus>('idle');
   readonly saveMessage = signal<string | null>(null);
 
   readonly isSaving = computed(() => this.saveStatus() === 'saving');
   readonly canSavePattern = computed(
-    () => this.patternName().trim().length > 0 && !this.isSaving(),
+    () => this.patternName().trim().length > 0 && !this.isSaving()
   );
 
   constructor() {
@@ -62,6 +64,7 @@ export class GameOfLifeStore {
 
     this.destroyRef.onDestroy(() => {
       this.stopTimer();
+      
       if (this.saveStatusResetTimer) {
         clearTimeout(this.saveStatusResetTimer);
         this.saveStatusResetTimer = null;
@@ -106,7 +109,10 @@ export class GameOfLifeStore {
     this.patternsError.set(null);
     
     try {
+      // Observable to Promise
       const patterns = await firstValueFrom(this.patternService.getAll());
+
+      // Could be done in the backend also
       const ordered = [...patterns].sort(
         (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
       );
@@ -138,11 +144,11 @@ export class GameOfLifeStore {
 
     try {
       const saved = await firstValueFrom(this.patternService.create(payload));
+
       this.patterns.update((patterns) => {
-        const withoutExisting = patterns.filter((pattern) => pattern.id !== saved.id);
         return [
           saved,
-          ...withoutExisting,
+          ...patterns,
         ].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
       });
 
@@ -185,6 +191,7 @@ export class GameOfLifeStore {
   }
 
   private toBoard(grid: number[][]): Board {
+    // If we have true and false given back from the backend
     return grid.map((row) => row.map((cell) => (cell ? 1 : 0))) as Board;
   }
 
@@ -211,7 +218,7 @@ export class GameOfLifeStore {
       return `Request failed with status ${error.status}`;
     }
 
-    if (error instanceof Error && error.message) {
+    else if (error instanceof Error && error.message) {
       return error.message;
     }
 
@@ -219,7 +226,7 @@ export class GameOfLifeStore {
   }
 
   private setSaveStatus(
-    status: 'idle' | 'saving' | 'success' | 'error',
+    status: SaveStatus,
     message: string | null = null,
   ): void {
     this.saveStatus.set(status);

@@ -1,10 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+
+import { GameOfLifeStore } from '../../data-access/game-of-life.store';
 
 @Component({
   selector: 'app-game-status-bar',
@@ -14,12 +10,15 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameStatusBarComponent {
-  readonly generation = input.required<number>();
-  readonly running = input.required<boolean>();
 
-  readonly toggle = output<void>();
-  readonly step = output<void>();
-  readonly randomize = output<void>();
+  private readonly store = inject(GameOfLifeStore);
+
+  readonly generation = this.store.generation;
+  readonly running = this.store.running;
+
+  readonly toggle = () => this.store.toggle();
+  readonly step = () => this.store.stepOnce();
+  readonly randomize = () => this.store.randomize();
 
   readonly statusText = computed(() => (this.running() ? 'Running' : 'Paused'));
 }

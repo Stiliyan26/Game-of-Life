@@ -24,7 +24,7 @@
       type="button"
       class="pattern-select__refresh"
       [disabled]="loading()"
-      (click)="refresh.emit()"
+      (click)="refresh()"
     >
       {{ loading() ? 'Loading…' : 'Refresh' }}
     </button>

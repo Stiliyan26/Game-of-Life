@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_URL } from '../../../core/api/api-url.token';
-import { CreatePatternPayload, Pattern } from './pattern.models';
+import { CreatePatternPayload, Pattern } from '../models/pattern.models';
 
 @Injectable()
 export class PatternService {

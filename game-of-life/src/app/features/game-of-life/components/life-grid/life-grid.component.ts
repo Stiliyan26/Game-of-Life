@@ -7,7 +7,7 @@ import { Board } from '../../utils/grid-utils';
   standalone: true,
   templateUrl: './life-grid.component.html',
   styleUrls: ['./life-grid.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LifeGridComponent {
   readonly board = input.required<Board>();

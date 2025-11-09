@@ -20,7 +20,7 @@
       type="button"
       class="pattern-save-form__button"
       [disabled]="!canSave() || isSaving()"
-      (click)="save.emit()"
+      (click)="save()"
     >
       {{ isSaving() ? 'Saving…' : 'Save pattern' }}
     </button>
