@@ -23,7 +23,7 @@ export class IsValidGridConstraint implements ValidatorConstraintInterface {
       }
 
       return row.every(
-        (cell) => cell === 0 || cell === 1 || cell === false || cell === true,
+        (cell) => cell === 0 || cell === 1
       );
     });
   }

@@ -36,10 +36,10 @@ async function bootstrap(): Promise<void> {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      forbidUnknownValues: true,
-      transform: true,
-      transformOptions: {
+      whitelist: true, // Strips props that aren't in the DTO
+      forbidUnknownValues: true, 
+      transform: true, // JSON -> DTO
+      transformOptions: { 
         enableImplicitConversion: true,
       },
     }),

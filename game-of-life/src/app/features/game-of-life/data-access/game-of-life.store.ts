@@ -111,14 +111,7 @@ export class GameOfLifeStore {
     try {
       // Observable to Promise
       const patterns = await firstValueFrom(this.patternService.getAll());
-
-      // Could be done in the backend also
-      const ordered = [...patterns].sort(
-        (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-      );
-    
-      this.patterns.set(ordered);
-    
+      this.patterns.set(patterns);
     } catch (error) {
       this.patternsError.set(this.extractErrorMessage(error));
     

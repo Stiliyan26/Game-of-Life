@@ -9,6 +9,7 @@ import { Model, Types } from 'mongoose';
 import { CreatePatternDto } from '../dto/create-pattern.dto';
 import { PatternResponseDto } from '../dto/pattern-response.dto';
 import { UpdatePatternDto } from '../dto/update-pattern.dto';
+import { CellState } from '../types/cell-state.type';
 import { Pattern, PatternDocument } from '../schemas/pattern.schema';
 
 @Injectable()
@@ -100,11 +101,17 @@ export class PatternsService {
     return this.toResponseDto(deleted);
   }
 
-  private normalizeGrid(grid: (0 | 1 | boolean)[][]): number[][] {
-    return grid.map((row) => row.map((cell) => (cell ? 1 : 0)));
+  private normalizeGrid(grid: CellState[][]): CellState[][] {
+    return grid.map<CellState[]>((row) =>
+      row.map<CellState>((cell) => (cell ? 1 : 0)),
+    );
   }
 
-  private assertDimensions(grid: number[][], rows: number, cols: number): void {
+  private assertDimensions(
+    grid: CellState[][],
+    rows: number,
+    cols: number,
+  ): void {
     if (grid.length !== rows) {
       throw new BadRequestException(
         `Grid row count (${grid.length}) does not match rows (${rows}).`,
@@ -112,6 +119,7 @@ export class PatternsService {
     }
 
     const columnMismatch = grid.some((row) => row.length !== cols);
+    
     if (columnMismatch) {
       throw new BadRequestException(
         'One or more grid rows do not match the specified cols.',
@@ -134,7 +142,7 @@ export class PatternsService {
       description: plain.description,
       rows: plain.rows,
       cols: plain.cols,
-      grid: plain.grid,
+      grid: plain.grid as CellState[][],
       createdBy: plain.createdBy,
       createdAt: plain.createdAt,
       updatedAt: plain.updatedAt,

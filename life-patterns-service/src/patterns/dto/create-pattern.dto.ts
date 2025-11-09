@@ -11,6 +11,7 @@ import {
 } from 'class-validator';
 
 import { IsValidGrid } from '../validators/is-valid-grid.decorator';
+import { CellState } from '../types/cell-state.type';
 
 export class CreatePatternDto {
   @IsString()
@@ -27,7 +28,7 @@ export class CreatePatternDto {
   @ArrayMinSize(1)
   @ArrayMaxSize(2000)
   @IsValidGrid()
-  grid!: (0 | 1 | boolean)[][];
+  grid!: CellState[][];
 
   @IsInt()
   @Min(1)

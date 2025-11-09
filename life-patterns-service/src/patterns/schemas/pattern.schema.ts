@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
+import { CellState } from '../types/cell-state.type';
+
 export type PatternDocument = HydratedDocument<Pattern>;
 
 @Schema({ timestamps: true })
@@ -21,7 +23,7 @@ export class Pattern {
     type: [[Number]],
     required: true,
     validate: {
-      validator: (grid: number[][]) => {
+      validator: (grid: CellState[][]) => {
         if (!Array.isArray(grid) || grid.length === 0) {
           return false;
         }
@@ -42,7 +44,7 @@ export class Pattern {
       message: 'grid must be a rectangular 2D array composed of 0 and 1 values',
     },
   })
-  grid!: number[][];
+  grid!: CellState[][];
 
   @Prop({ trim: true, maxlength: 100 })
   createdBy?: string;

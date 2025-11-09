@@ -29,7 +29,7 @@ export class PatternSelectComponent {
   }
 
   protected refresh(): void {
-    void this.store.loadPatterns();
+    this.store.loadPatterns();
   }
 }
 
